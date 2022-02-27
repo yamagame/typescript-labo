@@ -1,10 +1,17 @@
 # TypeScript Labo
 
+## 前提となるソフトウェア
+
+- [Node.js](https://nodejs.org/ja/)
+- [vscode](https://code.visualstudio.com/)
+- [git](https://git-scm.com/)
+- [yarn](https://yarnpkg.com/)
+
 ## プロジェクトの作成
 
 ```bash
-$ npm init -y
-$ npm install @types/node @types/ts-expose-internals typescript
+$ yarn init -y
+$ yarn install @types/node typescript
 ```
 
 ## tsconfig.json の作成
@@ -71,7 +78,7 @@ console.log(hello("Taro"));
 または
 
 ```bash
-$ npm run build
+$ yarn run build
 ```
 
 ## 実行
