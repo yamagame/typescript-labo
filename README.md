@@ -1,0 +1,81 @@
+# TypeScript Labo
+
+## プロジェクトの作成
+
+```bash
+$ npm init -y
+$ npm install @types/node @types/ts-expose-internals typescript
+```
+
+## tsconfig.json の作成
+
+```bash
+$ npx tsc --init
+```
+
+```json
+{
+  "compilerOptions": {
+    "target": "es2016",
+    "module": "commonjs",
+    "baseUrl": "./src",
+    "baseUrl": "./src",
+    "outDir": "./build",
+    "esModuleInterop": true,
+    "forceConsistentCasingInFileNames": true,
+    "strict": true,
+    "skipLibCheck": true
+  },
+  "include": ["./src/**/*"]
+}
+```
+
+## package.json の編集
+
+```json
+{
+  "name": "typescript-labo",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "start": "NODE_PATH=./build node build/index.js",
+    "build": "tsc",
+    "build:watch": "tsc --watch",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "devDependencies": {
+    "@types/node": "^17.0.21",
+    "@types/ts-expose-internals": "npm:ts-expose-internals@4.1.5",
+    "typescript": "^4.1.5"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC"
+}
+```
+
+## src/index.ts を作成
+
+```typescript
+function hello(name: string): string {
+  return `Hello, ${name}!`;
+}
+console.log(hello("Taro"));
+```
+
+## ビルド
+
+**Cmd/Ctrl + Shift + B** キーを押下
+
+または
+
+```bash
+$ npm run build
+```
+
+## 実行
+
+```bash
+$ NODE_PATH=./build node build/index.js
+```
