@@ -25,7 +25,7 @@ $ npx tsc --init
   "compilerOptions": {
     "target": "es2016",
     "module": "commonjs",
-    "baseUrl": "./src",
+    "rootDir": "./src",
     "baseUrl": "./src",
     "outDir": "./build",
     "esModuleInterop": true,
@@ -68,7 +68,7 @@ $ npx tsc --init
 function hello(name: string): string {
   return `Hello, ${name}!`;
 }
-console.log(hello("Taro"));
+console.log(hello('Taro'));
 ```
 
 ## ビルド
