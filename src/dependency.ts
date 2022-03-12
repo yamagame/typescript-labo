@@ -141,9 +141,13 @@ async function main(processArgv: string[]) {
     imports: imports.map((src) => removeRootDir(srcDir, src)),
   }));
   console.log(header);
+
   result.forEach((src) => {
     console.log(
-      `rectangle "${src.filename}" as ${src.filename.replace(/\//g, '_')}`
+      `rectangle "${path.basename(src.filename)}" as ${src.filename.replace(
+        /\//g,
+        '_'
+      )}`
     );
   });
   result.forEach((src) => {
@@ -153,6 +157,7 @@ async function main(processArgv: string[]) {
       )
     );
   });
+
   console.log(footer);
 }
 
