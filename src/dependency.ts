@@ -92,7 +92,9 @@ const findFile = (basePath: string, filename: string) => {
   return undefined;
 };
 
-const cachedFiles: { [index: string]: string[] } = {};
+type CachedFiles = { [index: string]: string[] };
+
+const cachedFiles: CachedFiles = {};
 
 const scanTypescriptAsync = async (srcPath: string) => {
   try {
@@ -116,7 +118,21 @@ const scanTypescriptAsync = async (srcPath: string) => {
   }
 };
 
-const header = `@startuml dependencies
+async function scanAsync(srcPath: string) {
+  await scanTypescriptAsync(srcPath);
+  const result = Object.entries(cachedFiles).map(([src, imports]) => ({
+    filename: removeRootDir(srcDir, src),
+    imports: imports.map((src) => removeRootDir(srcDir, src)),
+  }));
+  return result;
+}
+
+type ScanAsyncReturnType = ReturnType<typeof scanAsync> extends Promise<infer T>
+  ? T
+  : never;
+
+function genPlantUML(result: ScanAsyncReturnType) {
+  const header = `@startuml dependencies
 ' title  React サンプルプロジェクト 依存関係図
 skinparam shadowing false
 scale 0.8
@@ -124,22 +140,9 @@ skinparam packageStyle Rectangle
 left to right direction
 `;
 
-const footer = `@enduml
+  const footer = `@enduml
 `;
 
-async function main(processArgv: string[]) {
-  const argv = yargs(hideBin(processArgv))
-    .options({ _: { type: 'string' } })
-    .demandCommand(1, 'You need at least one typescript source path')
-    .help()
-    .parseSync();
-
-  const srcPath = argv._[0];
-  await scanTypescriptAsync(srcPath);
-  const result = Object.entries(cachedFiles).map(([src, imports]) => ({
-    filename: removeRootDir(srcDir, src),
-    imports: imports.map((src) => removeRootDir(srcDir, src)),
-  }));
   console.log(header);
 
   result.forEach((src) => {
@@ -159,6 +162,19 @@ async function main(processArgv: string[]) {
   });
 
   console.log(footer);
+}
+
+async function main(processArgv: string[]) {
+  const argv = yargs(hideBin(processArgv))
+    .options({ _: { type: 'string' } })
+    .demandCommand(1, 'You need at least one typescript source path')
+    .help()
+    .parseSync();
+
+  const srcPath = argv._[0];
+  const cachedFiles = await scanAsync(srcPath);
+
+  genPlantUML(cachedFiles);
 }
 
 if (require.main === module) {
