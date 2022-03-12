@@ -68,7 +68,7 @@ $ npx tsc --init
 function hello(name: string): string {
   return `Hello, ${name}!`;
 }
-console.log(hello("Taro"));
+console.log(hello('Taro'));
 ```
 
 ## ビルド
@@ -85,4 +85,10 @@ $ yarn run build
 
 ```bash
 $ NODE_PATH=./build node build/index.js
+```
+
+## 依存関係技
+
+```bash
+$ npx ts-node src/dependency.ts ../../react-typescript-starter-app/src/index.tsx | tee temp-test.plantuml
 ```
