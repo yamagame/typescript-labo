@@ -6,9 +6,18 @@ import { hello } from './hello/test';
  * @param name your name
  * @param className component class
  */
-function component(name: string, className: string) {
+function functionComponent(name: string, className: string) {
   // hello component1
   // hello component2
+
+  function internalFunction() {
+    return <div>Hello World</div>;
+  }
+
+  const internalArrowFunction = () => {
+    return <div>Hello World</div>;
+  };
+
   return (
     <>
       {/* JSX comment */}
@@ -17,7 +26,43 @@ function component(name: string, className: string) {
   );
 }
 
+export function helloFunction() {
+  return `Hello`;
+}
+
+async function helloFunctionAsync() {
+  return `Hello`;
+}
+
 // print component
-console.log(component('Taro', 'sample1 sample2')); /* trailing comment 1 */
+console.log(
+  functionComponent('Taro', 'sample1 sample2')
+); /* trailing comment 1 */
 // print hello
 /* leading comment */ console.log('hello'); /* trailing comment 2 */
+
+export const arrowComponent1 = () => <div>Hello World</div>;
+
+const arrowComponent2 = () => <div />;
+
+const arrowComponent3 = () => {
+  return <div>Hello World</div>;
+};
+
+const arrowComponent1Async = async () => <div>Hello World</div>;
+
+const arrowComponent2Async = async () => <div />;
+
+export const arrowComponent3Async = async () => {
+  return <div>Hello World</div>;
+};
+
+const arrowComponent4Async = async () => {
+  return (
+    <>
+      <div>Hello World</div>
+    </>
+  );
+};
+
+const arrow1Async = async () => 'hello';
