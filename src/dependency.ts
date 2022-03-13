@@ -5,6 +5,23 @@ import * as ts from 'typescript';
 import yargs from 'yargs';
 import { hideBin } from 'yargs/helpers';
 
+type PromiseReturnType<T> = T extends Promise<infer U> ? U : never;
+type ScanAsyncReturnType = PromiseReturnType<ReturnType<typeof scanAsync>>;
+
+type Unpacked<T> = T extends (infer U)[]
+  ? U
+  : T extends (...args: any[]) => infer U
+  ? U
+  : T extends Promise<infer U>
+  ? U
+  : T;
+
+type DirsType = {
+  __dir__?: string;
+  __dirs__?: { [index: string]: DirsType };
+  __files__?: { [index: string]: Unpacked<ScanAsyncReturnType> };
+};
+
 const basePath = '';
 
 const isDefined = <T>(value: T | null | undefined): value is T => {
@@ -127,11 +144,28 @@ async function scanAsync(srcPath: string) {
   return result;
 }
 
-type ScanAsyncReturnType = ReturnType<typeof scanAsync> extends Promise<infer T>
-  ? T
-  : never;
+function reduceDirectoryGroup(result: ScanAsyncReturnType) {
+  return result.reduce<DirsType>((sum, src) => {
+    const basename = path.basename(src.filename);
+    const dirs = path.dirname(src.filename).split('/');
+    let s = sum;
+    dirs.forEach((dir, i) => {
+      if (!s.__dirs__) s.__dirs__ = {};
+      if (!s.__dirs__[dir])
+        s.__dirs__[dir] = {
+          __dir__: dirs.slice(0, i + 1).join('_'),
+        };
+      s = s.__dirs__[dir];
+    });
+    if (!s.__files__) s.__files__ = {};
+    s.__files__[basename] = src;
+    return sum;
+  }, {});
+}
 
-function genPlantUML(result: ScanAsyncReturnType) {
+function printFilesDependencyPlantUML(
+  directoryGroups: ReturnType<typeof reduceDirectoryGroup>
+) {
   const header = `@startuml dependencies
 ' title  React サンプルプロジェクト 依存関係図
 skinparam shadowing false
@@ -145,21 +179,56 @@ left to right direction
 
   console.log(header);
 
-  result.forEach((src) => {
-    console.log(
-      `rectangle "${path.basename(src.filename)}" as ${src.filename.replace(
-        /\//g,
-        '_'
-      )}`
-    );
-  });
-  result.forEach((src) => {
-    src.imports.forEach((file) =>
-      console.log(
-        `${src.filename.replace(/\//g, '_')} --> ${file.replace(/\//g, '_')}`
-      )
-    );
-  });
+  const spaces = (level: number) => {
+    return new Array(level).fill('  ').join('');
+  };
+
+  const printGroup = (groups: DirsType, level: number) => {
+    if (groups.__dirs__) {
+      Object.entries(groups.__dirs__).forEach(([dirname, dirs]) => {
+        console.log(
+          `${spaces(level)}package "${dirname}" as ${
+            dirs.__dir__ === '.' ? 'root' : dirs.__dir__?.replace(/\//g, '_')
+          } {`
+        );
+        printGroup(dirs, level + 1);
+        console.log(`${spaces(level)}}`);
+      });
+    }
+    if (groups.__files__) {
+      Object.entries(groups.__files__).forEach(([filename, src]) => {
+        console.log(
+          `${spaces(level)}rectangle "${path.basename(
+            filename
+          )}" as ${src.filename.replace(/\//g, '_')}`
+        );
+      });
+    }
+  };
+
+  printGroup(directoryGroups, 0);
+
+  const printDependency = (groups: DirsType) => {
+    if (groups.__dirs__) {
+      Object.entries(groups.__dirs__).forEach(([_, dirs]) => {
+        printDependency(dirs);
+      });
+    }
+    if (groups.__files__) {
+      Object.entries(groups.__files__).forEach(([_, src]) => {
+        src.imports.forEach((file) =>
+          console.log(
+            `${src.filename.replace(/\//g, '_')} ---> ${file.replace(
+              /\//g,
+              '_'
+            )}`
+          )
+        );
+      });
+    }
+  };
+
+  printDependency(directoryGroups);
 
   console.log(footer);
 }
@@ -173,8 +242,9 @@ async function main(processArgv: string[]) {
 
   const srcPath = argv._[0];
   const cachedFiles = await scanAsync(srcPath);
+  const directoryGroups = reduceDirectoryGroup(cachedFiles);
 
-  genPlantUML(cachedFiles);
+  printFilesDependencyPlantUML(directoryGroups);
 }
 
 if (require.main === module) {
