@@ -89,6 +89,8 @@ $ NODE_PATH=./build node build/index.js
 
 ## 依存関係技
 
+使用例
+
 ```bash
-$ npx ts-node src/dependency.ts ../../react-typescript-starter-app/src/index.tsx | tee temp-test.plantuml
+$ npx ts-node src/dependency.ts --mode=directory --baseDir=../../react-typescript-starter-app/src/ ../../react-typescript-starter-app/src/index.tsx | tee temp-test.plantuml
 ```

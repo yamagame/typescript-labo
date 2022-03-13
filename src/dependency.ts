@@ -7,32 +7,37 @@ import { hideBin } from 'yargs/helpers';
 
 type PromiseReturnType<T> = T extends Promise<infer U> ? U : never;
 type ScanAsyncReturnType = PromiseReturnType<ReturnType<typeof scanAsync>>;
-
-type Unpacked<T> = T extends (infer U)[]
-  ? U
-  : T extends (...args: any[]) => infer U
-  ? U
-  : T extends Promise<infer U>
-  ? U
-  : T;
+type Flatten<Type> = Type extends Array<infer Item> ? Item : Type;
 
 type DirsType = {
   __dir__?: string;
   __dirs__?: { [index: string]: DirsType };
-  __files__?: { [index: string]: Unpacked<ScanAsyncReturnType> };
+  __files__?: { [index: string]: Flatten<ScanAsyncReturnType> };
 };
 
-const basePath = '';
+const header = [
+  '@startuml dependencies',
+  "' title  React サンプルプロジェクト 依存関係図",
+  'skinparam shadowing false',
+  'scale 0.8',
+  'skinparam packageStyle Rectangle',
+  // 'left to right direction',
+];
+
+const footer = ['@enduml'];
 
 const isDefined = <T>(value: T | null | undefined): value is T => {
   return value !== null && value !== undefined;
 };
 
+const spaces = (level: number) => {
+  return new Array(level).fill('  ').join('');
+};
+
 const exts = ['', '.ts', '.js', '.jsx', '.tsx'];
-const srcDir = '../../react-typescript-starter-app/src/';
 
 const removeRootDir = (srcDir: string, src: string) => {
-  if (src.indexOf(srcDir) === 0) {
+  if (srcDir !== '' && src.indexOf(srcDir) === 0) {
     return src.substring(srcDir.length);
   }
   return src;
@@ -51,7 +56,7 @@ const findFileWithExts = (makePathCallback: (ext: string) => string) => {
   return findFile;
 };
 
-const findFile = (basePath: string, filename: string) => {
+const findFile = (basePath: string, baseDir: string, filename: string) => {
   try {
     if (filename.startsWith('/')) return undefined;
     if (filename === '.') {
@@ -63,7 +68,8 @@ const findFile = (basePath: string, filename: string) => {
       }
       return undefined;
     }
-    if (fs.existsSync(filename)) return filename;
+    if (fs.existsSync(filename) && !fs.lstatSync(filename).isDirectory())
+      return filename;
     {
       const file = findFileWithExts((ext) =>
         path.join(`${filename}${ext}`).normalize()
@@ -91,13 +97,13 @@ const findFile = (basePath: string, filename: string) => {
     }
     {
       const file = findFileWithExts((ext) =>
-        path.join(srcDir, `${filename}${ext}`).normalize()
+        path.join(baseDir, `${filename}${ext}`).normalize()
       );
       if (file) return file;
     }
     {
       const file = findFileWithExts((ext) =>
-        path.join(srcDir, `${filename}/index${ext}`).normalize()
+        path.join(baseDir, `${filename}/index${ext}`).normalize()
       );
       if (file) return file;
     }
@@ -113,7 +119,7 @@ type CachedFiles = { [index: string]: string[] };
 
 const cachedFiles: CachedFiles = {};
 
-const scanTypescriptAsync = async (srcPath: string) => {
+const scanTypescriptAsync = async (srcPath: string, baseDir: string) => {
   try {
     if (cachedFiles[srcPath]) {
       return;
@@ -122,12 +128,12 @@ const scanTypescriptAsync = async (srcPath: string) => {
     const fileInfo = ts.preProcessFile(fs.readFileSync(srcPath).toString());
     const imports = fileInfo.importedFiles
       .map((file) => file.fileName)
-      .map((file) => findFile(path.dirname(srcPath), file))
+      .map((file) => findFile(path.dirname(srcPath), baseDir, file))
       .filter(isDefined);
     // console.log(imports);
     cachedFiles[srcPath] = imports;
     imports.forEach((importFile) => {
-      scanTypescriptAsync(importFile);
+      scanTypescriptAsync(importFile, baseDir);
     });
   } catch (err) {
     console.error(srcPath);
@@ -135,11 +141,11 @@ const scanTypescriptAsync = async (srcPath: string) => {
   }
 };
 
-async function scanAsync(srcPath: string) {
-  await scanTypescriptAsync(srcPath);
+async function scanAsync(srcPath: string, baseDir: string) {
+  await scanTypescriptAsync(srcPath, baseDir);
   const result = Object.entries(cachedFiles).map(([src, imports]) => ({
-    filename: removeRootDir(srcDir, src),
-    imports: imports.map((src) => removeRootDir(srcDir, src)),
+    filename: removeRootDir(baseDir, src),
+    imports: imports.map((src) => removeRootDir(baseDir, src)),
   }));
   return result;
 }
@@ -163,33 +169,23 @@ function reduceDirectoryGroup(result: ScanAsyncReturnType) {
   }, {});
 }
 
+const rootIsRoot = (path: string | undefined) => {
+  if (path === undefined) return 'undefined';
+  return path === '.' ? 'root' : path;
+};
+
 function printFilesDependencyPlantUML(
   directoryGroups: ReturnType<typeof reduceDirectoryGroup>
 ) {
-  const header = `@startuml dependencies
-' title  React サンプルプロジェクト 依存関係図
-skinparam shadowing false
-scale 0.8
-skinparam packageStyle Rectangle
-left to right direction
-`;
-
-  const footer = `@enduml
-`;
-
-  console.log(header);
-
-  const spaces = (level: number) => {
-    return new Array(level).fill('  ').join('');
-  };
+  console.log(header.join('\n'));
 
   const printGroup = (groups: DirsType, level: number) => {
     if (groups.__dirs__) {
       Object.entries(groups.__dirs__).forEach(([dirname, dirs]) => {
         console.log(
-          `${spaces(level)}package "${dirname}" as ${
-            dirs.__dir__ === '.' ? 'root' : dirs.__dir__?.replace(/\//g, '_')
-          } {`
+          `${spaces(level)}package "${dirname}" as ${rootIsRoot(
+            dirs.__dir__
+          ).replace(/\//g, '_')} {`
         );
         printGroup(dirs, level + 1);
         console.log(`${spaces(level)}}`);
@@ -230,21 +226,82 @@ left to right direction
 
   printDependency(directoryGroups);
 
-  console.log(footer);
+  console.log(footer.join('\n'));
+}
+
+function printDirectoryDependencyPlantUML(
+  directoryGroups: ReturnType<typeof reduceDirectoryGroup>
+) {
+  console.log(header.join('\n'));
+
+  const dependencies: { [index: string]: string[] } = {};
+
+  const printGroup = (groups: DirsType, level: number) => {
+    if (groups.__dirs__) {
+      Object.entries(groups.__dirs__).forEach(([dirname, dirs]) => {
+        console.log(
+          `${spaces(level)}package "${dirname}" as ${
+            dirs.__dir__ === '.' ? 'root' : dirs.__dir__?.replace(/\//g, '_')
+          } {`
+        );
+        printGroup(dirs, level + 1);
+        console.log(`${spaces(level)}}`);
+      });
+    }
+    if (groups.__files__) {
+      Object.entries(groups.__files__).forEach(([_, src]) => {
+        const dir = path.dirname(src.filename).replace(/\//g, '_');
+        src.imports.forEach((filename) => {
+          const importDir = path.dirname(filename).replace(/\//g, '_');
+          if (dir === importDir) return;
+          if (!dependencies[dir]) dependencies[dir] = [];
+          dependencies[dir].push(importDir);
+        });
+      });
+    }
+  };
+
+  printGroup(directoryGroups, 0);
+
+  const printDependency = (dependencies: { [index: string]: string[] }) => {
+    Object.entries(dependencies).forEach(([dir, imports]) => {
+      imports.forEach((importDir) => {
+        console.log(`${rootIsRoot(dir)} ---> ${rootIsRoot(importDir)}`);
+      });
+    });
+  };
+
+  printDependency(dependencies);
+
+  console.log(footer.join('\n'));
 }
 
 async function main(processArgv: string[]) {
   const argv = yargs(hideBin(processArgv))
-    .options({ _: { type: 'string' } })
+    .options({
+      _: { type: 'string' },
+      baseDir: { type: 'string', default: '' },
+      mode: {
+        choices: ['file', 'directory', 'dir'],
+        default: 'file',
+        describe: 'output mode',
+      },
+    })
     .demandCommand(1, 'You need at least one typescript source path')
     .help()
     .parseSync();
 
+  const baseDir = argv.baseDir;
   const srcPath = argv._[0];
-  const cachedFiles = await scanAsync(srcPath);
+  const cachedFiles = await scanAsync(srcPath, baseDir);
+  console.error(JSON.stringify(cachedFiles, null, '  '));
   const directoryGroups = reduceDirectoryGroup(cachedFiles);
 
-  printFilesDependencyPlantUML(directoryGroups);
+  if (argv.mode === 'directory' || argv.mode === 'dir') {
+    printDirectoryDependencyPlantUML(directoryGroups);
+  } else {
+    printFilesDependencyPlantUML(directoryGroups);
+  }
 }
 
 if (require.main === module) {
