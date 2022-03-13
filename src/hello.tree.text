@@ -1,0 +1,513 @@
+SourceFile 
+  SyntaxList 
+    ImportDeclaration 
+      ImportKeyword import
+      ImportClause 
+        NamedImports 
+          OpenBraceToken {
+          SyntaxList 
+            ImportSpecifier 
+              Identifier hello
+          CloseBraceToken }
+      FromKeyword from
+      StringLiteral './hello/test'
+      SemicolonToken ;
+    MultiLineCommentTrivia /**\n * component\n *\n * @param name your name\n * @param className component class\n */
+    FunctionDeclaration 
+      JSDocComment 
+      FunctionKeyword function
+      Identifier functionComponent
+      OpenParenToken (
+      SyntaxList 
+        Parameter 
+          Identifier name
+          ColonToken :
+          StringKeyword string
+        CommaToken ,
+        Parameter 
+          Identifier className
+          ColonToken :
+          StringKeyword string
+      CloseParenToken )
+      Block 
+        OpenBraceToken {
+        SingleLineCommentTrivia // hello component1
+        SingleLineCommentTrivia // hello component2
+        SyntaxList 
+          FunctionDeclaration 
+            FunctionKeyword function
+            Identifier internalFunction
+            OpenParenToken (
+            SyntaxList 
+            CloseParenToken )
+            Block 
+              OpenBraceToken {
+              SyntaxList 
+                ReturnStatement 
+                  ReturnKeyword return
+                  JsxElement <div>Hello World</div>
+                    JsxOpeningElement 
+                      LessThanToken <
+                      Identifier div
+                      JsxAttributes 
+                        SyntaxList 
+                      GreaterThanToken >
+                    SyntaxList 
+                      JsxText Hello World
+                    JsxClosingElement 
+                      LessThanToken <
+                      SlashToken /
+                      Identifier div
+                      GreaterThanToken >
+                  SemicolonToken ;
+              CloseBraceToken }
+          VariableStatement 
+            VariableDeclarationList 
+              ConstKeyword const
+              SyntaxList 
+                VariableDeclaration 
+                  Identifier internalArrowFunction
+                  EqualsToken =
+                  ArrowFunction 
+                    OpenParenToken (
+                    SyntaxList 
+                    CloseParenToken )
+                    EqualsGreaterThanToken =>
+                    Block 
+                      OpenBraceToken {
+                      SyntaxList 
+                        ReturnStatement 
+                          ReturnKeyword return
+                          JsxElement <div>Hello World</div>
+                            JsxOpeningElement 
+                              LessThanToken <
+                              Identifier div
+                              JsxAttributes 
+                                SyntaxList 
+                              GreaterThanToken >
+                            SyntaxList 
+                              JsxText Hello World
+                            JsxClosingElement 
+                              LessThanToken <
+                              SlashToken /
+                              Identifier div
+                              GreaterThanToken >
+                          SemicolonToken ;
+                      CloseBraceToken }
+            SemicolonToken ;
+          ReturnStatement 
+            ReturnKeyword return
+            ParenthesizedExpression 
+              OpenParenToken (
+              JsxFragment 
+                JsxOpeningFragment 
+                  LessThanToken <
+                  GreaterThanToken >
+                SyntaxList 
+                  JsxText 
+                  JsxExpression 
+                    OpenBraceToken {
+                    MultiLineCommentTrivia /* JSX comment */
+                    CloseBraceToken }
+                  JsxText 
+                  JsxElement <div className={className}>{`${hello}, ${name}!`}</div>
+                    JsxOpeningElement 
+                      LessThanToken <
+                      Identifier div
+                      JsxAttributes 
+                        SyntaxList 
+                          JsxAttribute 
+                            Identifier className
+                            EqualsToken =
+                            JsxExpression 
+                              OpenBraceToken {
+                              Identifier className
+                              CloseBraceToken }
+                      GreaterThanToken >
+                    SyntaxList 
+                      JsxExpression 
+                        OpenBraceToken {
+                        TemplateExpression 
+                          TemplateHead `${
+                          SyntaxList 
+                            TemplateSpan 
+                              Identifier hello
+                              TemplateMiddle }, ${
+                            TemplateSpan 
+                              Identifier name
+                              TemplateTail }!`
+                        CloseBraceToken }
+                    JsxClosingElement 
+                      LessThanToken <
+                      SlashToken /
+                      Identifier div
+                      GreaterThanToken >
+                  JsxText 
+                JsxClosingFragment 
+                  LessThanToken <
+                  SlashToken /
+                  GreaterThanToken >
+              CloseParenToken )
+            SemicolonToken ;
+        CloseBraceToken }
+    FunctionDeclaration 
+      SyntaxList 
+        ExportKeyword export
+      FunctionKeyword function
+      Identifier helloFunction
+      OpenParenToken (
+      SyntaxList 
+      CloseParenToken )
+      Block 
+        OpenBraceToken {
+        SyntaxList 
+          ReturnStatement 
+            ReturnKeyword return
+            NoSubstitutionTemplateLiteral `Hello`
+            SemicolonToken ;
+        CloseBraceToken }
+    FunctionDeclaration 
+      SyntaxList 
+        AsyncKeyword async
+      FunctionKeyword function
+      Identifier helloFunctionAsync
+      OpenParenToken (
+      SyntaxList 
+      CloseParenToken )
+      Block 
+        OpenBraceToken {
+        SyntaxList 
+          ReturnStatement 
+            ReturnKeyword return
+            NoSubstitutionTemplateLiteral `Hello`
+            SemicolonToken ;
+        CloseBraceToken }
+    SingleLineCommentTrivia // print component
+    ExpressionStatement 
+      CallExpression 
+        PropertyAccessExpression 
+          Identifier console
+          DotToken .
+          Identifier log
+        OpenParenToken (
+        SyntaxList 
+          CallExpression 
+            Identifier functionComponent
+            OpenParenToken (
+            SyntaxList 
+              StringLiteral 'Taro'
+              CommaToken ,
+              StringLiteral 'sample1 sample2'
+            CloseParenToken )
+        CloseParenToken )
+      SemicolonToken ;
+    MultiLineCommentTrivia /* trailing comment 1 */
+    SingleLineCommentTrivia // print hello
+    MultiLineCommentTrivia /* leading comment */
+    ExpressionStatement 
+      CallExpression 
+        PropertyAccessExpression 
+          Identifier console
+          DotToken .
+          Identifier log
+        OpenParenToken (
+        SyntaxList 
+          StringLiteral 'hello'
+        CloseParenToken )
+      SemicolonToken ;
+    MultiLineCommentTrivia /* trailing comment 2 */
+    VariableStatement 
+      SyntaxList 
+        ExportKeyword export
+      VariableDeclarationList 
+        ConstKeyword const
+        SyntaxList 
+          VariableDeclaration 
+            Identifier arrowComponent1
+            EqualsToken =
+            ArrowFunction 
+              OpenParenToken (
+              SyntaxList 
+              CloseParenToken )
+              EqualsGreaterThanToken =>
+              JsxElement <div>Hello World</div>
+                JsxOpeningElement 
+                  LessThanToken <
+                  Identifier div
+                  JsxAttributes 
+                    SyntaxList 
+                  GreaterThanToken >
+                SyntaxList 
+                  JsxText Hello World
+                JsxClosingElement 
+                  LessThanToken <
+                  SlashToken /
+                  Identifier div
+                  GreaterThanToken >
+      SemicolonToken ;
+    VariableStatement 
+      VariableDeclarationList 
+        ConstKeyword const
+        SyntaxList 
+          VariableDeclaration 
+            Identifier arrowComponent2
+            EqualsToken =
+            ArrowFunction 
+              OpenParenToken (
+              SyntaxList 
+              CloseParenToken )
+              EqualsGreaterThanToken =>
+              JsxSelfClosingElement 
+                LessThanToken <
+                Identifier div
+                JsxAttributes 
+                  SyntaxList 
+                SlashToken /
+                GreaterThanToken >
+      SemicolonToken ;
+    VariableStatement 
+      VariableDeclarationList 
+        ConstKeyword const
+        SyntaxList 
+          VariableDeclaration 
+            Identifier arrowComponent3
+            EqualsToken =
+            ArrowFunction 
+              OpenParenToken (
+              SyntaxList 
+              CloseParenToken )
+              EqualsGreaterThanToken =>
+              Block 
+                OpenBraceToken {
+                SyntaxList 
+                  ReturnStatement 
+                    ReturnKeyword return
+                    JsxElement <div>Hello World</div>
+                      JsxOpeningElement 
+                        LessThanToken <
+                        Identifier div
+                        JsxAttributes 
+                          SyntaxList 
+                        GreaterThanToken >
+                      SyntaxList 
+                        JsxText Hello World
+                      JsxClosingElement 
+                        LessThanToken <
+                        SlashToken /
+                        Identifier div
+                        GreaterThanToken >
+                    SemicolonToken ;
+                CloseBraceToken }
+      SemicolonToken ;
+    VariableStatement 
+      VariableDeclarationList 
+        ConstKeyword const
+        SyntaxList 
+          VariableDeclaration 
+            Identifier arrowComponent1Async
+            EqualsToken =
+            ArrowFunction 
+              SyntaxList 
+                AsyncKeyword async
+              OpenParenToken (
+              SyntaxList 
+              CloseParenToken )
+              EqualsGreaterThanToken =>
+              JsxElement <div>Hello World</div>
+                JsxOpeningElement 
+                  LessThanToken <
+                  Identifier div
+                  JsxAttributes 
+                    SyntaxList 
+                  GreaterThanToken >
+                SyntaxList 
+                  JsxText Hello World
+                JsxClosingElement 
+                  LessThanToken <
+                  SlashToken /
+                  Identifier div
+                  GreaterThanToken >
+      SemicolonToken ;
+    VariableStatement 
+      VariableDeclarationList 
+        ConstKeyword const
+        SyntaxList 
+          VariableDeclaration 
+            Identifier arrowComponent2Async
+            EqualsToken =
+            ArrowFunction 
+              SyntaxList 
+                AsyncKeyword async
+              OpenParenToken (
+              SyntaxList 
+              CloseParenToken )
+              EqualsGreaterThanToken =>
+              JsxSelfClosingElement 
+                LessThanToken <
+                Identifier div
+                JsxAttributes 
+                  SyntaxList 
+                SlashToken /
+                GreaterThanToken >
+      SemicolonToken ;
+    VariableStatement 
+      SyntaxList 
+        ExportKeyword export
+      VariableDeclarationList 
+        ConstKeyword const
+        SyntaxList 
+          VariableDeclaration 
+            Identifier arrowComponent3Async
+            EqualsToken =
+            ArrowFunction 
+              SyntaxList 
+                AsyncKeyword async
+              OpenParenToken (
+              SyntaxList 
+              CloseParenToken )
+              EqualsGreaterThanToken =>
+              Block 
+                OpenBraceToken {
+                SyntaxList 
+                  ReturnStatement 
+                    ReturnKeyword return
+                    JsxElement <div>Hello World</div>
+                      JsxOpeningElement 
+                        LessThanToken <
+                        Identifier div
+                        JsxAttributes 
+                          SyntaxList 
+                        GreaterThanToken >
+                      SyntaxList 
+                        JsxText Hello World
+                      JsxClosingElement 
+                        LessThanToken <
+                        SlashToken /
+                        Identifier div
+                        GreaterThanToken >
+                    SemicolonToken ;
+                CloseBraceToken }
+      SemicolonToken ;
+    VariableStatement 
+      VariableDeclarationList 
+        ConstKeyword const
+        SyntaxList 
+          VariableDeclaration 
+            Identifier arrowComponent4Async
+            EqualsToken =
+            ArrowFunction 
+              SyntaxList 
+                AsyncKeyword async
+              OpenParenToken (
+              SyntaxList 
+              CloseParenToken )
+              EqualsGreaterThanToken =>
+              Block 
+                OpenBraceToken {
+                SyntaxList 
+                  VariableStatement 
+                    VariableDeclarationList 
+                      ConstKeyword const
+                      SyntaxList 
+                        VariableDeclaration 
+                          Identifier val
+                          EqualsToken =
+                          ObjectLiteralExpression 
+                            OpenBraceToken {
+                            SyntaxList 
+                              PropertyAssignment 
+                                Identifier a
+                                ColonToken :
+                                NumericLiteral 100
+                              CommaToken ,
+                              PropertyAssignment 
+                                Identifier b
+                                ColonToken :
+                                NumericLiteral 200
+                              CommaToken ,
+                              PropertyAssignment 
+                                Identifier c
+                                ColonToken :
+                                NumericLiteral 300
+                              CommaToken ,
+                            CloseBraceToken }
+                    SemicolonToken ;
+                  VariableStatement 
+                    VariableDeclarationList 
+                      ConstKeyword const
+                      SyntaxList 
+                        VariableDeclaration 
+                          ObjectBindingPattern 
+                            OpenBraceToken {
+                            SyntaxList 
+                              BindingElement 
+                                Identifier a
+                              CommaToken ,
+                              BindingElement 
+                                Identifier b
+                            CloseBraceToken }
+                          EqualsToken =
+                          Identifier val
+                    SemicolonToken ;
+                  ReturnStatement 
+                    ReturnKeyword return
+                    ParenthesizedExpression 
+                      OpenParenToken (
+                      JsxFragment 
+                        JsxOpeningFragment 
+                          LessThanToken <
+                          GreaterThanToken >
+                        SyntaxList 
+                          JsxText 
+                          JsxElement <div>
+        Hello World {a} {b}
+      </div>
+                            JsxOpeningElement 
+                              LessThanToken <
+                              Identifier div
+                              JsxAttributes 
+                                SyntaxList 
+                              GreaterThanToken >
+                            SyntaxList 
+                              JsxText Hello World 
+                              JsxExpression 
+                                OpenBraceToken {
+                                Identifier a
+                                CloseBraceToken }
+                              JsxText 
+                              JsxExpression 
+                                OpenBraceToken {
+                                Identifier b
+                                CloseBraceToken }
+                              JsxText 
+                            JsxClosingElement 
+                              LessThanToken <
+                              SlashToken /
+                              Identifier div
+                              GreaterThanToken >
+                          JsxText 
+                        JsxClosingFragment 
+                          LessThanToken <
+                          SlashToken /
+                          GreaterThanToken >
+                      CloseParenToken )
+                    SemicolonToken ;
+                CloseBraceToken }
+      SemicolonToken ;
+    VariableStatement 
+      VariableDeclarationList 
+        ConstKeyword const
+        SyntaxList 
+          VariableDeclaration 
+            Identifier arrow1Async
+            EqualsToken =
+            ArrowFunction 
+              SyntaxList 
+                AsyncKeyword async
+              OpenParenToken (
+              SyntaxList 
+              CloseParenToken )
+              EqualsGreaterThanToken =>
+              StringLiteral 'hello'
+      SemicolonToken ;
+  EndOfFileToken 

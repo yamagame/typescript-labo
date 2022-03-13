@@ -82,33 +82,42 @@ function scanAllChildren(
   childrend.forEach((c) => scanAllChildren(result, c, node.pos, depth));
 }
 
-function scanJsxFunctions(result: LineInfo[]) {
-  const nextFunction = (i: number) => {
-    const node = result[i];
-    for (let j = i + 1; j < result.length; j++) {
-      const tnode = result[j];
+class TreeParser {
+  constructor(private nodes: LineInfo[]) {
+    //
+  }
+
+  nextFunction = (i: number) => {
+    const nodes = this.nodes;
+    const node = nodes[i];
+    for (let j = i + 1; j < nodes.length; j++) {
+      const tnode = nodes[j];
       if (tnode.level <= node.level) {
         return j;
       }
     }
-    return result.length;
+    return nodes.length;
   };
-  const prevFind = (i: number, kind: string) => {
-    const node = result[i];
+
+  prevFind = (i: number, kind: string) => {
+    const nodes = this.nodes;
+    const node = nodes[i];
     for (let j = i - 1; j >= 0; j--) {
-      const tnode = result[j];
+      const tnode = nodes[j];
       if (tnode.level < node.level) throw new Error('error 2');
       if (tnode.kind.indexOf(kind) === 0) return j;
     }
     return 0;
   };
-  const nextFind = (i: number, kind: string | string[]) => {
+
+  nextFind = (i: number, kind: string | string[]) => {
+    const nodes = this.nodes;
     const findCore = (i: number, kind: string) => {
-      const node = result[i];
-      for (let j = i + 1; j < result.length; j++) {
-        const tnode = result[j];
+      const node = nodes[i];
+      for (let j = i + 1; j < nodes.length; j++) {
+        const tnode = nodes[j];
         if (tnode.level < node.level) return -1;
-        if (result[j].kind.indexOf(kind) === 0) return j;
+        if (nodes[j].kind.indexOf(kind) === 0) return j;
       }
       return -1;
     };
@@ -121,33 +130,134 @@ function scanJsxFunctions(result: LineInfo[]) {
     }
     return findCore(i, kind);
   };
+}
+
+function scanJsxFunctions(result: LineInfo[]) {
+  const tree = new TreeParser(result);
   for (let i = 0; i < result.length; i++) {
     const node = result[i];
     if (node.kind === 'FunctionDeclaration') {
-      const f = nextFind(i, 'FunctionKeyword');
-      const e = nextFind(i, 'ExportKeyword');
-      const t = nextFind(i, 'Identifier');
-      if (nextFind(t, 'JsxElement') >= 0) {
+      const f = tree.nextFind(i, 'FunctionKeyword');
+      const e = tree.nextFind(i, 'ExportKeyword');
+      const t = tree.nextFind(i, 'Identifier');
+      if (tree.nextFind(t, 'JsxElement') >= 0) {
         console.log(`${e >= 0 ? 'export ' : ''}${result[t].text}`);
       }
-      i = nextFunction(i);
+      i = tree.nextFunction(i);
     }
     if (node.kind === 'VariableStatement') {
-      const a = nextFind(i, 'ArrowFunction');
+      const a = tree.nextFind(i, 'ArrowFunction');
       if (a >= 0) {
-        const e = nextFind(i, ['SyntaxList', 'ExportKeyword']);
-        const t = prevFind(a, 'Identifier');
+        const e = tree.nextFind(i, ['SyntaxList', 'ExportKeyword']);
+        const t = tree.prevFind(a, 'Identifier');
         if (t >= 0) {
           if (
-            nextFind(t, 'JsxElement') >= 0 ||
-            nextFind(t, 'JsxSelfClosingElement') >= 0
+            tree.nextFind(t, 'JsxElement') >= 0 ||
+            tree.nextFind(t, 'JsxSelfClosingElement') >= 0
           ) {
             console.log(`${e >= 0 ? 'export ' : ''}${result[t].text}`);
           }
         }
-        i = nextFunction(a);
+        i = tree.nextFunction(a);
       }
     }
+  }
+}
+
+type ScanNode = {
+  level: number;
+  export?: string;
+  kind: string;
+  name?: string;
+};
+
+function scanJsxElements(nodes: LineInfo[]) {
+  const result: ScanNode[] = [];
+  const tree = new TreeParser(nodes);
+  for (let i = 0; i < nodes.length; i++) {
+    const node = nodes[i];
+    if (node.kind === 'ReturnStatement') {
+      result.push({
+        level: node.level,
+        kind: node.kind,
+      });
+    } else if (node.kind === 'FunctionDeclaration') {
+      const exp = `${tree.nextFind(i, 'ExportKeyword') >= 0 ? 'export ' : ''}`;
+      const t = tree.nextFind(i, 'Identifier');
+      result.push({
+        level: node.level,
+        export: exp,
+        kind: node.kind,
+        name: nodes[t].text,
+      });
+    } else if (node.kind === 'VariableStatement') {
+      const exp = `${
+        tree.nextFind(i, ['SyntaxList', 'ExportKeyword']) >= 0 ? 'export ' : ''
+      }`;
+      const a = tree.nextFind(i, 'ArrowFunction');
+      if (a >= 0) {
+        const t = tree.prevFind(a, 'Identifier');
+        if (t >= 0) {
+          result.push({
+            level: node.level,
+            export: exp,
+            kind: nodes[a].kind,
+            name: nodes[t].text,
+          });
+        } else {
+          result.push({
+            level: node.level,
+            export: exp,
+            kind: nodes[a].kind,
+          });
+        }
+      }
+    } else if (node.kind === 'JsxElement') {
+      const n = tree.nextFind(i, ['JsxOpeningElement', 'Identifier']);
+      if (n >= 0) {
+        result.push({
+          level: node.level,
+          kind: node.kind,
+          name: nodes[n].text,
+        });
+      } else {
+        result.push({
+          level: node.level,
+          kind: node.kind,
+        });
+      }
+    } else if (node.kind === 'JsxSelfClosingElement') {
+      const n = tree.nextFind(i, ['Identifier']);
+      if (n >= 0) {
+        result.push({
+          level: node.level,
+          kind: node.kind,
+          name: nodes[n].text,
+        });
+      } else {
+        result.push({
+          level: node.level,
+          kind: node.kind,
+        });
+      }
+    }
+  }
+  {
+    let level: number[] = [];
+    return result.map((node) => {
+      if (level.length === 0) level.push(node.level);
+      while (true) {
+        if (level[level.length - 1] < node.level) {
+          level.push(node.level);
+        } else if (level[level.length - 1] > node.level) {
+          level.pop();
+        } else {
+          break;
+        }
+      }
+      node.level = level.indexOf(node.level);
+      return node;
+    });
   }
 }
 
@@ -156,7 +266,7 @@ async function main(arg: string[]) {
     .options({
       _: { type: 'string' },
       mode: {
-        choices: ['src', 'tree', 'json', 'jsx-element'],
+        choices: ['src', 'tree', 'json', 'component', 'element'],
         default: 'src',
         describe: 'output mode',
       },
@@ -228,9 +338,22 @@ async function main(arg: string[]) {
     });
   }
 
-  // JSXエレメント
-  if (argv.mode === 'jsx-element') {
+  // Reactコンポーネント
+  if (argv.mode === 'component') {
     scanJsxFunctions(result);
+  }
+
+  // JSXエレメント
+  if (argv.mode === 'element') {
+    const retval = scanJsxElements(result);
+    // console.log(JSON.stringify(retval, null, '  '));
+    retval.forEach((node) =>
+      console.log(
+        `${indent(node.level)}${node.kind} ${
+          node.name !== undefined ? `"${node.name}"` : ''
+        }`
+      )
+    );
   }
 }
 

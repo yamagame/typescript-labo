@@ -1,0 +1,8 @@
+export functionComponent
+export arrowComponent1
+arrowComponent2
+arrowComponent3
+arrowComponent1Async
+arrowComponent2Async
+export arrowComponent3Async
+arrowComponent4Async

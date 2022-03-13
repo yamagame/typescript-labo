@@ -1,0 +1,130 @@
+[
+  {
+    "level": 0,
+    "export": "export ",
+    "kind": "FunctionDeclaration",
+    "name": "functionComponent"
+  },
+  {
+    "level": 1,
+    "export": "",
+    "kind": "FunctionDeclaration",
+    "name": "internalFunction"
+  },
+  {
+    "level": 2,
+    "kind": "JsxElement",
+    "name": "div"
+  },
+  {
+    "level": 1,
+    "export": "",
+    "kind": "ArrowFunction",
+    "name": "internalArrowFunction"
+  },
+  {
+    "level": 2,
+    "kind": "JsxElement",
+    "name": "div"
+  },
+  {
+    "level": 2,
+    "kind": "JsxElement",
+    "name": "div"
+  },
+  {
+    "level": 0,
+    "export": "export ",
+    "kind": "FunctionDeclaration",
+    "name": "helloFunction"
+  },
+  {
+    "level": 0,
+    "export": "export ",
+    "kind": "FunctionDeclaration",
+    "name": "helloFunctionAsync"
+  },
+  {
+    "level": 0,
+    "export": "export ",
+    "kind": "ArrowFunction",
+    "name": "arrowComponent1"
+  },
+  {
+    "level": 1,
+    "kind": "JsxElement",
+    "name": "div"
+  },
+  {
+    "level": 0,
+    "export": "",
+    "kind": "ArrowFunction",
+    "name": "arrowComponent2"
+  },
+  {
+    "level": 1,
+    "kind": "JsxSelfClosingElement",
+    "name": "div"
+  },
+  {
+    "level": 0,
+    "export": "",
+    "kind": "ArrowFunction",
+    "name": "arrowComponent3"
+  },
+  {
+    "level": 1,
+    "kind": "JsxElement",
+    "name": "div"
+  },
+  {
+    "level": 0,
+    "export": "",
+    "kind": "ArrowFunction",
+    "name": "arrowComponent1Async"
+  },
+  {
+    "level": 1,
+    "kind": "JsxElement",
+    "name": "div"
+  },
+  {
+    "level": 0,
+    "export": "",
+    "kind": "ArrowFunction",
+    "name": "arrowComponent2Async"
+  },
+  {
+    "level": 1,
+    "kind": "JsxSelfClosingElement",
+    "name": "div"
+  },
+  {
+    "level": 0,
+    "export": "export ",
+    "kind": "ArrowFunction",
+    "name": "arrowComponent3Async"
+  },
+  {
+    "level": 1,
+    "kind": "JsxElement",
+    "name": "div"
+  },
+  {
+    "level": 0,
+    "export": "",
+    "kind": "ArrowFunction",
+    "name": "arrowComponent4Async"
+  },
+  {
+    "level": 1,
+    "kind": "JsxElement",
+    "name": "div"
+  },
+  {
+    "level": 0,
+    "export": "",
+    "kind": "ArrowFunction",
+    "name": "arrow1Async"
+  }
+]

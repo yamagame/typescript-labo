@@ -1,0 +1,83 @@
+{
+  level: 2,
+  export: 'export ',
+  kind: 'FunctionDeclaration',
+  name: 'functionComponent'
+}
+{
+  level: 5,
+  export: '',
+  kind: 'FunctionDeclaration',
+  name: 'internalFunction'
+}
+{ level: 9, kind: 'JsxElement', name: 'div' }
+{
+  level: 5,
+  export: '',
+  kind: 'ArrowFunction',
+  name: 'internalArrowFunction'
+}
+{ level: 13, kind: 'JsxElement', name: 'div' }
+{ level: 9, kind: 'JsxElement', name: 'div' }
+{
+  level: 2,
+  export: 'export ',
+  kind: 'FunctionDeclaration',
+  name: 'helloFunction'
+}
+{
+  level: 2,
+  export: 'export ',
+  kind: 'FunctionDeclaration',
+  name: 'helloFunctionAsync'
+}
+{
+  level: 2,
+  export: 'export ',
+  kind: 'ArrowFunction',
+  name: 'arrowComponent1'
+}
+{ level: 7, kind: 'JsxElement', name: 'div' }
+{
+  level: 2,
+  export: '',
+  kind: 'ArrowFunction',
+  name: 'arrowComponent2'
+}
+{ level: 7, kind: 'JsxSelfClosingElement', name: 'div' }
+{
+  level: 2,
+  export: '',
+  kind: 'ArrowFunction',
+  name: 'arrowComponent3'
+}
+{ level: 10, kind: 'JsxElement', name: 'div' }
+{
+  level: 2,
+  export: '',
+  kind: 'ArrowFunction',
+  name: 'arrowComponent1Async'
+}
+{ level: 7, kind: 'JsxElement', name: 'div' }
+{
+  level: 2,
+  export: '',
+  kind: 'ArrowFunction',
+  name: 'arrowComponent2Async'
+}
+{ level: 7, kind: 'JsxSelfClosingElement', name: 'div' }
+{
+  level: 2,
+  export: 'export ',
+  kind: 'ArrowFunction',
+  name: 'arrowComponent3Async'
+}
+{ level: 10, kind: 'JsxElement', name: 'div' }
+{
+  level: 2,
+  export: '',
+  kind: 'ArrowFunction',
+  name: 'arrowComponent4Async'
+}
+{ level: 13, kind: 'JsxElement', name: 'div' }
+{ level: 2, export: '', kind: 'ArrowFunction', name: 'arrow1Async' }

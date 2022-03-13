@@ -1,0 +1,31 @@
+FunctionDeclaration "functionComponent"
+  FunctionDeclaration "internalFunction"
+    ReturnStatement 
+      JsxElement "div"
+  ArrowFunction "internalArrowFunction"
+    ReturnStatement 
+      JsxElement "div"
+  ReturnStatement 
+    JsxElement "div"
+FunctionDeclaration "helloFunction"
+  ReturnStatement 
+FunctionDeclaration "helloFunctionAsync"
+  ReturnStatement 
+ArrowFunction "arrowComponent1"
+  JsxElement "div"
+ArrowFunction "arrowComponent2"
+  JsxSelfClosingElement "div"
+ArrowFunction "arrowComponent3"
+  ReturnStatement 
+    JsxElement "div"
+ArrowFunction "arrowComponent1Async"
+  JsxElement "div"
+ArrowFunction "arrowComponent2Async"
+  JsxSelfClosingElement "div"
+ArrowFunction "arrowComponent3Async"
+  ReturnStatement 
+    JsxElement "div"
+ArrowFunction "arrowComponent4Async"
+  ReturnStatement 
+    JsxElement "div"
+ArrowFunction "arrow1Async"
