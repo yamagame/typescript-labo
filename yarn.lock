@@ -127,10 +127,10 @@
     "@types/mime" "^1"
     "@types/node" "*"
 
-"@types/ts-expose-internals@npm:ts-expose-internals@4.1.5":
-  version "4.1.5"
-  resolved "https://registry.yarnpkg.com/ts-expose-internals/-/ts-expose-internals-4.1.5.tgz#b7133c259b0c6a8f278f9c80dc7668fcb02c0ee1"
-  integrity sha512-k3+0aCS8AkmdpXx1GI69uF0sV8txsXVa5GnMvyJyG3j1f9+M81wnWjcs1zvCuVnG7kcTtWkpiuPtUocLsnlLmQ==
+"@types/ts-expose-internals@npm:ts-expose-internals@4.0.5":
+  version "4.0.5"
+  resolved "https://registry.yarnpkg.com/ts-expose-internals/-/ts-expose-internals-4.0.5.tgz#a7de2ee484f1de724c947aa19d2a4b0c029edb69"
+  integrity sha512-WBbory3iJPyQ70Y84nF5QLgwR/1WsPNmTtevRvkGyNnTYNrMMsXIfmu3489otfddZfuPmim0z14I7KHedQuTcw==
 
 "@types/yargs-parser@*":
   version "21.0.0"
@@ -1251,10 +1251,10 @@ typedarray-to-buffer@^3.1.5:
   dependencies:
     is-typedarray "^1.0.0"
 
-typescript@^4.1.5:
-  version "4.5.5"
-  resolved "https://registry.yarnpkg.com/typescript/-/typescript-4.5.5.tgz#d8c953832d28924a9e3d37c73d729c846c5896f3"
-  integrity sha512-TCTIul70LyWe6IJWT8QSYeA54WQe8EjQFU4wY52Fasj5UKx88LNYKCgBEHcOMOrFF1rKGbD8v/xcNWVUq9SymA==
+typescript@^4.0.5:
+  version "4.6.2"
+  resolved "https://registry.yarnpkg.com/typescript/-/typescript-4.6.2.tgz#fe12d2727b708f4eef40f51598b3398baa9611d4"
+  integrity sha512-HM/hFigTBHZhLXshn9sN37H085+hQGeJHJ/X7LpBWLID/fbc2acUMfU+lGD98X81sKP+pFa9f0DZmCwB9GnbAg==
 
 undefsafe@^2.0.5:
   version "2.0.5"
