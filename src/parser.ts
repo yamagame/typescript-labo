@@ -104,7 +104,7 @@ class TreeParser {
     const node = nodes[i];
     for (let j = i - 1; j >= 0; j--) {
       const tnode = nodes[j];
-      if (tnode.level < node.level) throw new Error('error 2');
+      if (tnode.level < node.level) return -1;
       if (tnode.kind.indexOf(kind) === 0) return j;
     }
     return 0;
