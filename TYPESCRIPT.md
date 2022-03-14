@@ -29,3 +29,9 @@ $ npx ts-node src/parser.ts --mode="json" src/hello.tsx | tee src/temp-hello_tes
 ```bash
 $ npx ts-node src/parser.ts src/hello.tsx | tee src/temp-hello_test.tsx
 ```
+
+## コンパイル例
+
+```bash
+$ npx tsc --esModuleInterop src/parser.ts
+```
