@@ -276,6 +276,7 @@ async function main(arg: string[]) {
     .parseSync();
 
   const sourcePath = argv._[0];
+
   var sourceCode = fs.readFileSync(sourcePath, 'utf-8').trim();
 
   var sourceFile = ts.createSourceFile(
@@ -321,6 +322,7 @@ async function main(arg: string[]) {
 
   // TREE形式
   if (argv.mode === 'tree') {
+    console.log(`### ${sourcePath}`);
     result.forEach((node) => {
       if (node.kind.match(/Trivia$/)) {
         console.log(
@@ -340,11 +342,13 @@ async function main(arg: string[]) {
 
   // Reactコンポーネント
   if (argv.mode === 'component') {
+    console.log(`### ${sourcePath}`);
     scanJsxFunctions(result);
   }
 
   // JSXエレメント
   if (argv.mode === 'element') {
+    console.log(`### ${sourcePath}`);
     const retval = scanJsxElements(result);
     // console.log(JSON.stringify(retval, null, '  '));
     retval.forEach((node) =>
